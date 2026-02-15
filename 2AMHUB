@@ -1,5 +1,5 @@
 -- ============================================================
--- VYSE SLOTTED - MERGED EDITION WITH AUTO PLAY
+-- 2AM HUB - MERGED EDITION WITH AUTO PLAY
 -- Combined features with purple UI theme + Auto Left/Right
 -- ============================================================
 
@@ -1575,6 +1575,6 @@ task.spawn(function()
     if Enabled.AutoRightEnabled then AutoRightEnabled = true startAutoRight() end
 end)
 
-print("=== VYSE SLOTTED - PURPLE EDITION WITH AUTO PLAY LOADED ===")
+print("=== 2AM HUB - PURPLE EDITION WITH AUTO PLAY LOADED ===")
 print("Q (changeable) = Toggle Speed Mode | E = Auto Bat | M = Galaxy Mode | Space = Galaxy Hops")
 print("Z = Auto Left | C = Auto Right (Keybinds Customizable!)")

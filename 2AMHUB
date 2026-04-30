@@ -1,114 +1,60 @@
 -- ================================
 -- 2AMHUB — Made By Hesa
--- Fully preserved CZ Hub features with premium UI
 -- ================================
 
-local ANIMATION_MODE = "GUI"
-local animationCompleted = false
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
 
-if ANIMATION_MODE == "GUI" and game then
-    local Players = game:GetService("Players")
-    local TweenService = game:GetService("TweenService")
-    local player = Players.LocalPlayer
+-- Main UI
+local function createMainUI()
+    local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+    screenGui.Name = "2AMHUB_UI"
 
-    local sg = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-    sg.Name = "2AMHUB_Intro"
-    sg.ResetOnSpawn = false
-    sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    local mainFrame = Instance.new("Frame", screenGui)
+    mainFrame.Size = UDim2.new(0, 520, 0, 520)
+    mainFrame.Position = UDim2.new(0, 10, 0, 60)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(9, 11, 16)
+    mainFrame.BackgroundTransparency = 0.08
+    mainFrame.BorderSizePixel = 0
+    mainFrame.ZIndex = 10
+    Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 20)
 
-    -- Intro Animation Function
-    local function makeIntroText(txt, size, y, color, stroke)
-        local label = Instance.new("TextLabel", sg)
-        label.Size = UDim2.new(0, 500, 0, size)
-        label.Position = UDim2.new(0.5, -250, 0.5, y)
-        label.BackgroundTransparency = 1
-        label.Text = txt
-        label.TextScaled = true
-        label.Font = Enum.Font.GothamBlack
-        label.TextColor3 = color
-        label.TextStrokeTransparency = stroke and 0.3 or 1
-        label.TextStrokeColor3 = Color3.fromRGB(0, 80, 100)
-        label.ZIndex = 2
-        label.TextTransparency = 1
-        return label
-    end
+    -- Title bar
+    local titleBar = Instance.new("Frame", mainFrame)
+    titleBar.Size = UDim2.new(1, 0, 0, 48)
+    titleBar.BackgroundColor3 = Color3.fromRGB(13, 16, 23)
+    titleBar.BorderSizePixel = 0
+    titleBar.ZIndex = 11
+    Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 20)
 
-    -- Create intro labels
-    local t1 = makeIntroText("2AMHUB", 70, -75, Color3.fromRGB(0, 230, 210), true)
-    local t2 = makeIntroText("Made By Hesa", 42, 10, Color3.fromRGB(80, 255, 220), true)
-    local t3 = makeIntroText("Premium UI", 22, 62, Color3.fromRGB(160, 200, 200), false)
+    local titleLabel = Instance.new("TextLabel", titleBar)
+    titleLabel.Size = UDim2.new(0.5, 0, 1, 0)
+    titleLabel.Position = UDim2.new(0, 20, 0, 0)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Text = "2AMHUB"
+    titleLabel.Font = Enum.Font.GothamBlack
+    titleLabel.TextSize = 14
+    titleLabel.TextColor3 = Color3.fromRGB(220, 225, 235)
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Animate intro
-    task.spawn(function()
-        local fi = TweenInfo.new(1.1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-        local fo = TweenInfo.new(1.0, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-        for _, lbl in ipairs({t1, t2, t3}) do
-            TweenService:Create(lbl, fi, {TextTransparency = 0}):Play()
-        end
-        task.wait(2)
-        for _, lbl in ipairs({t1, t2, t3}) do
-            TweenService:Create(lbl, fo, {TextTransparency = 1}):Play()
-        end
-        task.wait(1.1)
-        sg:Destroy()
-        animationCompleted = true
-    end)
-else
-    animationCompleted = true
-end
+    -- Close button
+    local closeBtn = Instance.new("TextButton", titleBar)
+    closeBtn.Size = UDim2.new(0, 30, 0, 30)
+    closeBtn.Position = UDim2.new(1, -40, 0, 9)
+    closeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    closeBtn.Text = "×"
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.TextSize = 16
+    closeBtn.TextColor3 = Color3.new(1,1,1)
+    closeBtn.BorderSizePixel = 0
+    closeBtn.ZIndex = 12
+    Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(1, 0)
+    closeBtn.MouseButton1Click: = function() mainFrame.Visible = false end
 
-local function waitForAnim()
-    while not animationCompleted do task.wait(0.1) end
-    task.wait(0.4)
-end
-
-task.spawn(function()
-    waitForAnim()
-    -- Main Script Logic Begins Here
-
-    -- ============================
-    -- SERVICES
-    -- ============================
-    local Services = {
-        Players = game:GetService("Players"),
-        RunService = game:GetService("RunService"),
-        UserInputService = game:GetService("UserInputService"),
-        TweenService = game:GetService("TweenService"),
-        Lighting = game:GetService("Lighting"),
-        HttpService = game:GetService("HttpService"),
-    }
-
-    local player = Services.Players.LocalPlayer
-    local PlayerGui = player:WaitForChild("PlayerGui")
-
-    -- ============================
-    -- COLORS / THEME
-    -- ============================
-    local TH = {
-        bg = Color3.fromRGB(9, 11, 16),
-        panel = Color3.fromRGB(13, 16, 23),
-        panel2 = Color3.fromRGB(18, 22, 32),
-        panel3 = Color3.fromRGB(24, 29, 42),
-        accent = Color3.fromRGB(0, 220, 200),
-        accent2 = Color3.fromRGB(0, 170, 155),
-        green = Color3.fromRGB(30, 220, 100),
-        red = Color3.fromRGB(220, 55, 55),
-        off = Color3.fromRGB(36, 40, 54),
-        text = Color3.fromRGB(220, 225, 235),
-        muted = Color3.fromRGB(90, 100, 120),
-        gold = Color3.fromRGB(255, 195, 55),
-        purple = Color3.fromRGB(145, 75, 255),
-        divider = Color3.fromRGB(25, 30, 44),
-    }
-
-    -- ============================
-    -- CONFIG (variables)
-    -- ============================
-    -- Keep or reorganize your variables here as needed
-
-    -- ============================
-    -- UI Helper Functions
-    -- ============================
+    -- Make draggable
     local function makeDraggable(frame, handle)
         handle = handle or frame
         local dragging, startPos, startOffset
@@ -119,12 +65,12 @@ task.spawn(function()
                 startOffset = Vector2.new(frame.Position.X.Offset, frame.Position.Y.Offset)
             end
         end)
-        Services.UserInputService.InputEnded:Connect(function(input)
+        UserInputService.InputEnded:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                 dragging = false
             end
         end)
-        Services.UserInputService.InputChanged:Connect(function(input)
+        UserInputService.InputChanged:Connect(function(input)
             if dragging and startPos then
                 local dx = input.Position.X - startPos.X
                 local dy = input.Position.Y - startPos.Y
@@ -132,540 +78,98 @@ task.spawn(function()
             end
         end)
     end
-
-    -- ============================
-    -- Main UI Frame
-    -- ============================
-    local MainGui = Instance.new("ScreenGui", PlayerGui)
-    MainGui.Name = "2AMHUB_UI"
-    MainGui.ResetOnSpawn = false
-    MainGui.IgnoreGuiInset = true
-    MainGui.DisplayOrder = 20
-    MainGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-    local mainFrame = Instance.new("Frame", MainGui)
-    mainFrame.Size = UDim2.new(0, 520, 0, 520)
-    mainFrame.Position = UDim2.new(0, 10, 0, 60)
-    mainFrame.BackgroundColor3 = TH.bg
-    mainFrame.BackgroundTransparency = 0.08
-    mainFrame.BorderSizePixel = 0
-    mainFrame.ZIndex = 10
-    Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 20)
-    local mfStroke = Instance.new("UIStroke", mainFrame)
-    mfStroke.Color = TH.accent
-    mfStroke.Thickness = 1.5
-    mfStroke.Transparency = 0.5
-
-    -- Title Bar
-    local titleBar = Instance.new("Frame", mainFrame)
-    titleBar.Size = UDim2.new(1, 0, 0, 48)
-    titleBar.BackgroundColor3 = TH.panel
-    titleBar.BorderSizePixel = 0
-    titleBar.ZIndex = 11
-    Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 20)
-
-    local titleLbl = Instance.new("TextLabel", titleBar)
-    titleLbl.Size = UDim2.new(0.5, 0, 1, 0)
-    titleLbl.Position = UDim2.new(0, 28, 0, 0)
-    titleLbl.BackgroundTransparency = 1
-    titleLbl.Text = "2AMHUB"
-    titleLbl.Font = Enum.Font.GothamBlack
-    titleLbl.TextSize = 14
-    titleLbl.TextColor3 = TH.text
-    titleLbl.TextXAlignment = Enum.TextXAlignment.Left
-    titleLbl.ZIndex = 12
-
-    -- Close Button
-    local closeBtn = Instance.new("TextButton", titleBar)
-    closeBtn.Size = UDim2.new(0, 30, 0, 30)
-    closeBtn.Position = UDim2.new(1, -40, 0, 9)
-    closeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-    closeBtn.Text = "×"
-    closeBtn.TextColor3 = Color3.new(1, 1, 1)
-    closeBtn.Font = Enum.Font.GothamBold
-    closeBtn.TextSize = 16
-    closeBtn.BorderSizePixel = 0
-    closeBtn.ZIndex = 13
-    Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(1, 0)
-    closeBtn.MouseButton1Click: = function() mainFrame.Visible = false end
-
-    -- Make draggable
     makeDraggable(mainFrame, titleBar)
 
-    -- Divider line
-    local divider = Instance.new("Frame", mainFrame)
-    divider.Size = UDim2.new(1, -20, 0, 1)
-    divider.Position = UDim2.new(0, 10, 0, 48)
-    divider.BackgroundColor3 = TH.divider
-    divider.BorderSizePixel = 0
-
-    -- Sidebar (left)
-    local sideBar = Instance.new("Frame", mainFrame)
-    sideBar.Size = UDim2.new(0, 120, 1, -58)
-    sideBar.Position = UDim2.new(0, 0, 0, 52)
-    sideBar.BackgroundColor3 = TH.panel
-    sideBar.BorderSizePixel = 0
-    sideBar.ZIndex = 11
-    local sbLayout = Instance.new("UIListLayout", sideBar)
-    sbLayout.Padding = UDim.new(0, 2)
-    sbLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
-    -- Content (right)
-    local contentArea = Instance.new("Frame", mainFrame)
-    contentArea.Size = UDim2.new(1, -126, 1, -58)
-    contentArea.Position = UDim2.new(0, 124, 0, 52)
-    contentArea.BackgroundTransparency = 1
-    contentArea.BorderSizePixel = 0
-    contentArea.ZIndex = 11
-
-    -- Bottom Fix for Sidebar
-    local sbBottomFix = Instance.new("Frame", mainFrame)
-    sbBottomFix.Size = UDim2.new(0, 120, 0, 20)
-    sbBottomFix.Position = UDim2.new(0, 0, 1, -20)
-    sbBottomFix.BackgroundColor3 = TH.panel
-    sbBottomFix.BorderSizePixel = 0
-
-    -- ============================
-    -- Tab System
-    -- ============================
-    local tabNames = { "Move", "Combat", "Visual", "Settings", "Keys" }
-    local tabPages = {}
+    -- Tab buttons (Move, Combat, Visual, Settings, Keys)
+    local tabNames = {"Move", "Combat", "Visual", "Settings", "Keys"}
     local tabButtons = {}
-    local activeTab = "Move"
+    local tabContents = {}
 
-    local function setActiveTab(name)
-        activeTab = name
-        for _, tabName in ipairs(tabNames) do
-            local btn = tabButtons[tabName]
-            local page = tabPages[tabName]
-            if btn and page then
-                page.Visible = (tabName == name)
-                if tabName == name then
-                    btn.BackgroundColor3 = TH.panel2
-                    btn.TextColor3 = TH.accent
-                    local pip = btn:FindFirstChild("ActivePip")
-                    if pip then pip.Visible = true end
-                else
-                    btn.BackgroundColor3 = Color3.new(0, 0, 0)
-                    btn.TextColor3 = TH.muted
-                    local pip = btn:FindFirstChild("ActivePip")
-                    if pip then pip.Visible = false end
-                end
-            end
-        end
-    end
+    local tabHolder = Instance.new("Frame", mainFrame)
+    tabHolder.Size = UDim2.new(1, 0, 1, -48)
+    tabHolder.Position = UDim2.new(0, 0, 0, 48)
+    tabHolder.BackgroundTransparency = 1
+
+    local sidebar = Instance.new("Frame", tabHolder)
+    sidebar.Size = UDim2.new(0, 120, 1, 0)
+    sidebar.Position = UDim2.new(0, 0, 0, 0)
+    sidebar.BackgroundColor3 = Color3.fromRGB(13, 16, 23)
+    sidebar.BorderSizePixel = 0
+
+    local contentFrame = Instance.new("Frame", tabHolder)
+    contentFrame.Size = UDim2.new(1, -120, 1, 0)
+    contentFrame.Position = UDim2.new(0, 120, 0, 0)
+    contentFrame.BackgroundTransparency = 1
 
     -- Create tab buttons
     for i, name in ipairs(tabNames) do
-        local btn = Instance.new("TextButton", sideBar)
-        btn.Size = UDim2.new(1, 0, 0, 46)
-        btn.BackgroundColor3 = Color3.new(0, 0, 0)
-        btn.BackgroundTransparency = 1
-        btn.Text = name:upper()
+        local btn = Instance.new("TextButton", sidebar)
+        btn.Size = UDim2.new(1, 0, 0, 40)
+        btn.Position = UDim2.new(0, 0, (i-1)*40, 0)
+        btn.BackgroundColor3 = Color3.fromRGB(0,0,0)
+        btn.Text = name
         btn.Font = Enum.Font.GothamBlack
         btn.TextSize = 10
+        btn.TextColor3 = Color3.fromRGB(150,150,150)
         btn.BorderSizePixel = 0
         btn.ZIndex = 12
-        btn.LayoutOrder = i
 
-        -- Active pip
-        local pip = Instance.new("Frame", btn)
-        pip.Name = "ActivePip"
-        pip.Size = UDim2.new(0, 3, 0, 22)
-        pip.Position = UDim2.new(0, 0, 0.5, -11)
-        pip.BackgroundColor3 = TH.accent
-        pip.BorderSizePixel = 0
-        pip.Visible = (name == activeTab)
-        Instance.new("UICorner", pip).CornerRadius = UDim.new(0, 2)
-
-        if name == activeTab then
-            btn.BackgroundColor3 = TH.panel2
-            btn.TextColor3 = TH.accent
-        end
-
-        tabButtons[name] = btn
-        btn.MouseButton1Click: = function()
-            setActiveTab(name)
-        end
-
-        -- Create page frame
-        local page = Instance.new("Frame", contentArea)
-        page.Size = UDim2.new(1, 0, 1, 0)
-        page.BackgroundTransparency = 1
-        page.BorderSizePixel = 0
-        page.Visible = (name == activeTab)
-        page.ZIndex = 12
-        tabPages[name] = page
-    end
-
-    -- ============================
-    -- Build each tab content
-    -- ============================
-
-    -- Example: Move Tab Content
-    do
-        local function makeSection(title)
-            local section = Instance.new("Frame", tabPages["Move"])
-            section.Size = UDim2.new(1, 0, 0, 30)
-            section.BackgroundTransparency = 1
-            section.ZIndex = 12
-
-            local line = Instance.new("Frame", section)
-            line.Size = UDim2.new(0, 3, 0, 18)
-            line.Position = UDim2.new(0, 8, 0.5, -9)
-            line.BackgroundColor3 = TH.accent
-            line.BorderSizePixel = 0
-            Instance.new("UICorner", line).CornerRadius = UDim.new(1, 0)
-
-            local label = Instance.new("TextLabel", section)
-            label.Size = UDim2.new(1, -18, 1, 0)
-            label.Position = UDim2.new(0, 18, 0, 0)
-            label.BackgroundTransparency = 1
-            label.Text = title:upper()
-            label.Font = Enum.Font.GothamBlack
-            label.TextSize = 10
-            label.TextColor3 = TH.accent
-            label.TextXAlignment = Enum.TextXAlignment.Left
-            label.ZIndex = 13
-
-            return section
-        end
-
-        local function makeToggle(name, default, color, callback)
-            local toggleFrame = Instance.new("Frame", tabPages["Move"])
-            toggleFrame.Size = UDim2.new(1, -16, 0, 52)
-            toggleFrame.BackgroundColor3 = TH.panel2
-            toggleFrame.BorderSizePixel = 0
-            toggleFrame.ZIndex = 12
-            Instance.new("UICorner", toggleFrame).CornerRadius = UDim.new(0, 14)
-
-            local stroke = Instance.new("UIStroke", toggleFrame)
-            stroke.Color = TH.divider
-            stroke.Thickness = 1.5
-            stroke.Transparency = 0.3
-            stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-
-            local dot = Instance.new("Frame", toggleFrame)
-            dot.Size = UDim2.new("0,9", "0,9")
-            dot.Position = UDim2.new(0, 14, 0.5, -4)
-            dot.BackgroundColor3 = default and TH.green or TH.muted
-            dot.BorderSizePixel = 0
-            Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
-
-            local label = Instance.new("TextLabel", toggleFrame)
-            label.Size = UDim2.new(1, -120, 0, 28)
-            label.Position = UDim2.new(0, 30, 0, 4)
-            label.BackgroundTransparency = 1
-            label.Text = name:upper()
-            label.Font = Enum.Font.GothamBlack
-            label.TextSize = 11
-            label.TextColor3 = default and TH.text or TH.muted
-            label.TextXAlignment = Enum.TextXAlignment.Left
-            label.ZIndex = 13
-
-            local statusLbl = Instance.new("TextLabel", toggleFrame)
-            statusLbl.Size = UDim2.new(1, -120, 0, 18)
-            statusLbl.Position = UDim2.new(0, 30, 0, 30)
-            statusLbl.BackgroundTransparency = 1
-            statusLbl.Text = default and "● ACTIVE" or "○ INACTIVE"
-            statusLbl.Font = Enum.Font.GothamSemibold
-            statusLbl.TextSize = 9
-            statusLbl.TextColor3 = default and color or TH.muted
-            statusLbl.TextXAlignment = Enum.TextXAlignment.Left
-            statusLbl.ZIndex = 13
-
-            local pillBg = Instance.new("Frame", toggleFrame)
-            pillBg.Size = UDim2.new(0, 46, 0, 24)
-            pillBg.Position = UDim2.new(1, -58, 0.5, -12)
-            pillBg.BackgroundColor3 = default and TH.green or TH.off
-            pillBg.BorderSizePixel = 0
-            Instance.new("UICorner", pillBg).CornerRadius = UDim.new(1, 0)
-            local pillCirc = Instance.new("Frame", pillBg)
-            pillCirc.Size = UDim2.new(0, 18, 0, 18)
-            pillCirc.Position = default and UDim2.new(1, -21, 0.5, -9) or UDim2.new(0, 3, 0.5, -9)
-            pillCirc.BackgroundColor3 = Color3.new(1,1,1)
-            pillCirc.BorderSizePixel = 0
-            Instance.new("UICorner", pillCirc).CornerRadius = UDim.new(1, 0)
-
-            -- Spin border
-            local spinGlow, startSpin, stopSpin = makeAnimatedBorder(toggleFrame, color)
-            local spinConn
-
-            local function setActive(state)
-                TweenService:Create(pillBg, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {BackgroundColor3 = state and TH.green or TH.off}):Play()
-                TweenService:Create(pillCirc, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Position = state and UDim2.new(1, -21, 0.5, -9) or UDim2.new(0, 3, 0.5, -9)}):Play()
-                TweenService:Create(toggleFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {BackgroundColor3 = state and Color3.fromRGB(14, 22, 32) or TH.panel2}):Play()
-                statusLbl.Text = state and "● ACTIVE" or "○ INACTIVE"
-                statusLbl.TextColor3 = state and color or TH.muted
-                dot.BackgroundColor3 = state and TH.green or TH.muted
-
-                if state then
-                    if spinConn then spinConn:Disconnect() end
-                    spinConn = startSpin()
-                else
-                    if spinConn then spinConn:Disconnect() end
-                    stopSpin()
-                end
-            end
-
-            local btn = Instance.new("TextButton", toggleFrame)
-            btn.Size = UDim2.new(1, 0, 1, 0)
-            btn.BackgroundTransparency = 1
-            btn.Text = ""
-            btn.ZIndex = 15
-            btn.MouseButton1Click: = function()
-                local newState = not (statusLbl.Text == "● ACTIVE")
-                setActive(newState)
-                if callback then callback(newState) end
-            end
-
-            -- Initialize default
-            if default then task.delay(0.1, function() setActive(true) end) end
-            toggleSetters[name] = setActive
-            return toggleFrame, setActive
-        end
-
-        -- Example toggles
-        makeToggle("Auto Left", false, TH.accent, function(s)
-            if s then autoLOn=true; startAutoL() else autoLOn=false; stopAutoL() end
-        end)
-
-        makeToggle("Auto Right", false, TH.accent, function(s)
-            if s then autoROn=true; startAutoR() else autoROn=false; stopAutoR() end
-        end)
-
-        -- Add other toggles similarly...
-
-    end
-
-    -- (Repeat similar structure for other tabs: Combat, Visual, Settings, Keys)
-    -- For brevity, not all tabs are fully expanded here, but follow the same pattern.
-
-    -- ============================
-    -- Floating Buttons
-    -- ============================
-    local FloatGui = Instance.new("ScreenGui", PlayerGui)
-    FloatGui.Name = "2AMHUB_Float"
-    FloatGui.ResetOnSpawn = false
-    FloatGui.IgnoreGuiInset = true
-
-    local function createFloatBtn(id, label1, label2, defX, defY, accent, onToggle, isAction)
-        local btn = Instance.new("TextButton", FloatGui)
-        btn.Name = "Float_"..id
-        btn.Size = UDim2.new(0, 100, 0, 48)
-        btn.Position = UDim2.new(0, defX, 0, defY)
-        btn.BackgroundColor3 = Color3.fromRGB(10,12,18)
-        btn.BorderSizePixel = 0
-        btn.Text = ""
-        btn.ZIndex = 22
-        Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 16)
-
-        -- Border glow
-        local stroke = Instance.new("UIStroke", btn)
-        stroke.Color = TH.divider
-        stroke.Thickness = 1.5
-        stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-
-        -- Dot indicator
-        local dot = Instance.new("Frame", btn)
-        dot.Size = UDim2.new(0, 8, 0, 8)
-        dot.Position = UDim2.new(0, 10, 0, 10)
-        dot.BackgroundColor3 = TH.muted
-        dot.BorderSizePixel = 0
-        Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
-
-        -- Labels
-        local lbl1 = Instance.new("TextLabel", btn)
-        lbl1.Size = UDim2.new(1, -14, 0, 24)
-        lbl1.Position = UDim2.new(0, 12, 0, 10)
-        lbl1.BackgroundTransparency = 1
-        lbl1.Text = label1:upper()
-        lbl1.Font = Enum.Font.GothamBlack
-        lbl1.TextSize = 10
-        lbl1.TextColor3 = TH.text
-        lbl1.TextXAlignment = Enum.TextXAlignment.Left
-        lbl1.ZIndex = 23
-
-        local lbl2 = Instance.new("TextLabel", btn)
-        lbl2.Size = UDim2.new(1, -14, 0, 16)
-        lbl2.Position = UDim2.new(0, 12, 0, 30)
-        lbl2.BackgroundTransparency = 1
-        lbl2.Text = label2
-        lbl2.Font = Enum.Font.GothamSemibold
-        lbl2.TextSize = 8
-        lbl2.TextColor3 = TH.muted
-        lbl2.TextXAlignment = Enum.TextXAlignment.Left
-        lbl2.ZIndex = 23
-
-        -- Spin glow
-        local spinGlow, startSpin, stopSpin = makeAnimatedBorder(btn, accent)
-        local spinConn
-
-        local function setActive(state)
-            if state then
-                TweenService:Create(btn, TweenInfo.new(0.08), {BackgroundColor3 = Color3.fromRGB(18,28,38)}):Play()
-                task.delay(0.15, function()
-                    if btn.Parent then
-                        TweenService:Create(btn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(10,12,18)}):Play()
-                    end
-                end)
-                if onToggle then onToggle(true) end
-                spinConn = startSpin()
-            else
-                TweenService:Create(btn, TweenInfo.new(0.08), {BackgroundColor3 = Color3.fromRGB(18,28,38)}):Play()
-                task.delay(0.15, function()
-                    if btn.Parent then
-                        TweenService:Create(btn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(10,12,18)}):Play()
-                    end
-                end)
-                if onToggle then onToggle(false) end
-                if spinConn then spinConn:Disconnect() end
-                stopSpin()
-            end
-        end
+        -- Content for each tab
+        local tabContent = Instance.new("Frame", contentFrame)
+        tabContent.Size = UDim2.new(1,0,1,0)
+        tabContent.BackgroundTransparency = 1
+        tabContent.Visible = false
+        tabContents[name] = tabContent
 
         -- Button click
-        local btnClick = Instance.new("TextButton", btn)
-        btnClick.Size = UDim2.new(1, 0, 1, 0)
-        btnClick.BackgroundTransparency = 1
-        btnClick.Text = ""
-        btnClick.ZIndex = 24
-        btnClick.MouseButton1Click: = function()
-            setActive(not (lbl1.Text == "● ACTIVE"))
-        end
-
-        -- Initialize default
-        task.delay(0.1, function() setActive(true) end)
-        toggleSetters[id] = setActive
-        return btn, setActive
-    end
-
-    -- Create floating buttons
-    createFloatBtn("Aimbot", "Aimbot", "Lock Target", 115, 130, TH.accent, function(s)
-        -- toggle Aimbot logic
-    end)
-    createFloatBtn("Drop", "Drop", "Fling", 115, 188, TH.gold, function() task.spawn(doDrop) end, true)
-    createFloatBtn("TPDown", "TP", "Down", 115, 246, TH.accent, function() task.spawn(doTPDown) end, true)
-    createFloatBtn("Desync", "Desync", "Mode", 115, 304, TH.gold, function(s)
-        desyncEnabled = s
-        if s then
-            speedMode = "DESYNC"
-            lagSpeedEnabled = false
-            stopLagSpeed()
-        elseif speedMode == "DESYNC" then
-            speedMode = "NORMAL"
-        end
-    end)
-    createFloatBtn("LagSpeed", "Lag", "Speed", 115, 362, TH.purple, function(s)
-        lagSpeedEnabled = s
-        if s then
-            speedMode = "LAGGER"
-            desyncEnabled = false
-            if floatBtnSetters.Desync then floatBtnSetters.Desync(false) end
-            startLagSpeed()
-        else
-            speedMode = "NORMAL"
-            stopLagSpeed()
-        end
-    end)
-    createFloatBtn("AutoLeft", "Auto", "Left", 115, 420, TH.accent, function(s)
-        if s then autoLOn=true; startAutoL() else autoLOn=false; stopAutoL() end
-    end)
-    createFloatBtn("AutoRight", "Auto", "Right", 165, 420, TH.accent, function(s)
-        if s then autoROn=true; startAutoR() else autoROn=false; stopAutoR() end
-    end)
-
-    -- ============================
-    -- Hamburger Button to toggle main UI
-    -- ============================
-    local hamBtn = Instance.new("TextButton", FloatGui)
-    hamBtn.Size = UDim2.new(0, 48, 0, 48)
-    hamBtn.Position = UDim2.new(1, -58, 0, 10)
-    hamBtn.BackgroundColor3 = Color3.fromRGB(9, 11, 16)
-    hamBtn.BackgroundTransparency = 0.05
-    hamBtn.BorderSizePixel = 0
-    hamBtn.Text = ""
-    hamBtn.ZIndex = 25
-    Instance.new("UICorner", hamBtn).CornerRadius = UDim.new(0, 14)
-    for i=0,2 do
-        local bar = Instance.new("Frame", hamBtn)
-        bar.Size = UDim2.new(0, 24, 0, 3)
-        bar.Position = UDim2.new(0.5, -12, 0, 13 + i*10)
-        bar.BackgroundColor3 = TH.accent
-        bar.BorderSizePixel = 0
-        Instance.new("UICorner", bar).CornerRadius = UDim.new(0, 2)
-    end
-    hamBtn.MouseButton1Click: = function()
-        mainFrame.Visible = not mainFrame.Visible
-        if mainFrame.Visible then
-            mainFrame.BackgroundTransparency = 0.3
-            TweenService:Create(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {BackgroundTransparency=0.08}):Play()
+        btn.MouseButton1Click: = function()
+            for n, frame in pairs(tabContents) do
+                frame.Visible = (n == name)
+            end
+            for _, b in pairs(sidebar:GetChildren()) do
+                if b:IsA("TextButton") then
+                    b.TextColor3 = (b == btn) and Color3.fromRGB(255,255,255) or Color3.fromRGB(150,150,150)
+                end
+            end
         end
     end
-    makeDraggable(mainFrame, titleBar)
 
-    -- ============================
-    -- Progress Bar at bottom center
-    -- ============================
-    local PBC = Instance.new("Frame", PlayerGui)
-    PBC.Size = UDim2.new(0, 250, 0, 38)
-    PBC.Position = UDim2.new(0.5, -125, 1, -58)
-    PBC.BackgroundColor3 = Color3.fromRGB(8, 10, 16)
-    PBC.BackgroundTransparency = 0
-    PBC.BorderSizePixel = 0
-    Instance.new("UICorner", PBC).CornerRadius = UDim.new(0, 14)
+    -- Initialize first tab as active
+    local firstTab = tabContents["Move"]
+    firstTab.Visible = true
+    for _, b in pairs(sidebar:GetChildren()) do
+        if b:IsA("TextButton") then
+            b.TextColor3 = (b == sidebar:FindFirstChild("Move")) and Color3.fromRGB(255,255,255) or Color3.fromRGB(150,150,150)
+        end
+    end
 
-    local pbStroke = Instance.new("UIStroke", PBC)
-    pbStroke.Color = TH.accent
-    pbStroke.Thickness = 1.5
-    pbStroke.Transparency = 0.4
+    -- Add simple sample content to "Move" tab
+    local moveTab = tabContents["Move"]
+    local label = Instance.new("TextLabel", moveTab)
+    label.Size = UDim2.new(1, -20, 0, 50)
+    label.Position = UDim2.new(0, 10, 0, 10)
+    label.Text = "This is the Move tab"
+    label.TextColor3 = Color3.fromRGB(220, 225, 235)
+    label.BackgroundTransparency = 1
+    label.Font = Enum.Font.GothamBlack
+    label.TextSize = 14
 
-    local pbTrack = Instance.new("Frame", PBC)
-    pbTrack.Size = UDim2.new(0.88, 0, 0, 4)
-    pbTrack.Position = UDim2.new(0.06, 0, 1, -10)
-    pbTrack.BackgroundColor3 = TH.panel3
-    pbTrack.BorderSizePixel = 0
-    Instance.new("UICorner", pbTrack).CornerRadius = UDim.new(1, 0)
+    -- You can add more UI elements to each tab content as needed
 
-    ProgressBarFill = Instance.new("Frame", pbTrack)
-    ProgressBarFill.Size = UDim2.new(0, 0, 1, 0)
-    ProgressBarFill.BackgroundColor3 = TH.green
-    ProgressBarFill.BorderSizePixel = 0
-    Instance.new("UICorner", ProgressBarFill).CornerRadius = UDim.new(1, 0)
+end
 
-    ProgressLabel = Instance.new("TextLabel", PBC)
-    ProgressLabel.Size = UDim2.new(0.55, 0, 0.65, 0)
-    ProgressLabel.Position = UDim2.new(0, 26, 0, 4)
-    ProgressLabel.BackgroundTransparency = 1
-    ProgressLabel.Text = "READY"
-    ProgressLabel.TextColor3 = TH.text
-    ProgressLabel.Font = Enum.Font.GothamBold
-    ProgressLabel.TextSize = 11
-    ProgressLabel.TextXAlignment = Enum.TextXAlignment.Left
+-- Call to create the UI
+createMainUI()
 
-    ProgressPctLabel = Instance.new("TextLabel", PBC)
-    ProgressPctLabel.Size = UDim2.new(0, 0, 0, 0)
-    ProgressPctLabel.Visible = false
-
-    -- ============================
-    -- Input Handlers for keybinds
-    -- ============================
-    Services.UserInputService.InputBegan:Connect(function(input, processed)
-        if processed then return end
-        local kc = input.KeyCode
-        if kc == Enum.KeyCode.Unknown then return end
-        -- Handle keybinds here, e.g.:
-        -- if kc == Keybinds.AutoLeft then ...
-    end)
-
-    -- ============================
-    -- Initialize Features
-    -- ============================
-    -- Example: toggle ESP, Spin, etc.
-    -- For example:
-    -- if espEnabled then enableESP() end
-    -- if spinBotEnabled then startSpin() end
-    -- etc.
-
-    print("✅ 2AMHUB Loaded!")
+-- Toggle main UI with U key
+local mainUIVisible = true
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.U then
+        mainUIVisible = not mainUIVisible
+        local mainGui = game:GetService("CoreGui"):FindFirstChild("2AMHUB_UI") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("2AMHUB_UI")
+        if mainGui then
+            mainGui.Enabled = mainUIVisible
+        end
+    end
 end)

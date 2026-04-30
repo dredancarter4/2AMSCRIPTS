@@ -102,9 +102,9 @@ task.spawn(function()
     }
 
     -- ============================
-    -- CONFIG VARIABLES
+    -- CONFIG (variables)
     -- ============================
-    -- (Keep your variables as is, or reorganize if needed)
+    -- Keep or reorganize your variables here as needed
 
     -- ============================
     -- UI Helper Functions
@@ -136,14 +136,14 @@ task.spawn(function()
     -- ============================
     -- Main UI Frame
     -- ============================
-    local MainUI = Instance.new("ScreenGui", PlayerGui)
-    MainUI.Name = "2AMHUB_UI"
-    MainUI.ResetOnSpawn = false
-    MainUI.IgnoreGuiInset = true
-    MainUI.DisplayOrder = 20
-    MainUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    local MainGui = Instance.new("ScreenGui", PlayerGui)
+    MainGui.Name = "2AMHUB_UI"
+    MainGui.ResetOnSpawn = false
+    MainGui.IgnoreGuiInset = true
+    MainGui.DisplayOrder = 20
+    MainGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-    local mainFrame = Instance.new("Frame", MainUI)
+    local mainFrame = Instance.new("Frame", MainGui)
     mainFrame.Size = UDim2.new(0, 520, 0, 520)
     mainFrame.Position = UDim2.new(0, 10, 0, 60)
     mainFrame.BackgroundColor3 = TH.bg
@@ -187,18 +187,17 @@ task.spawn(function()
     closeBtn.BorderSizePixel = 0
     closeBtn.ZIndex = 13
     Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(1, 0)
-    closeBtn.MouseButton1Click:Connect(function() mainFrame.Visible = false end)
+    closeBtn.MouseButton1Click: = function() mainFrame.Visible = false end
 
-    -- Draggable Main Frame
+    -- Make draggable
     makeDraggable(mainFrame, titleBar)
 
-    -- Divider Line
+    -- Divider line
     local divider = Instance.new("Frame", mainFrame)
     divider.Size = UDim2.new(1, -20, 0, 1)
     divider.Position = UDim2.new(0, 10, 0, 48)
     divider.BackgroundColor3 = TH.divider
     divider.BorderSizePixel = 0
-    divider.ZIndex = 11
 
     -- Sidebar (left)
     local sideBar = Instance.new("Frame", mainFrame)
@@ -211,7 +210,7 @@ task.spawn(function()
     sbLayout.Padding = UDim.new(0, 2)
     sbLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-    -- Content Area (right)
+    -- Content (right)
     local contentArea = Instance.new("Frame", mainFrame)
     contentArea.Size = UDim2.new(1, -126, 1, -58)
     contentArea.Position = UDim2.new(0, 124, 0, 52)
@@ -234,7 +233,6 @@ task.spawn(function()
     local tabButtons = {}
     local activeTab = "Move"
 
-    -- Function to set active tab
     local function setActiveTab(name)
         activeTab = name
         for _, tabName in ipairs(tabNames) do
@@ -257,7 +255,7 @@ task.spawn(function()
         end
     end
 
-    -- Create Tabs Buttons
+    -- Create tab buttons
     for i, name in ipairs(tabNames) do
         local btn = Instance.new("TextButton", sideBar)
         btn.Size = UDim2.new(1, 0, 0, 46)
@@ -270,7 +268,7 @@ task.spawn(function()
         btn.ZIndex = 12
         btn.LayoutOrder = i
 
-        -- Active Pip Indicator
+        -- Active pip
         local pip = Instance.new("Frame", btn)
         pip.Name = "ActivePip"
         pip.Size = UDim2.new(0, 3, 0, 22)
@@ -290,13 +288,13 @@ task.spawn(function()
             setActiveTab(name)
         end
 
-        -- Create page Frame
+        -- Create page frame
         local page = Instance.new("Frame", contentArea)
         page.Size = UDim2.new(1, 0, 1, 0)
         page.BackgroundTransparency = 1
         page.BorderSizePixel = 0
-        page.ZIndex = 12
         page.Visible = (name == activeTab)
+        page.ZIndex = 12
         tabPages[name] = page
     end
 
@@ -304,7 +302,7 @@ task.spawn(function()
     -- Build each tab content
     -- ============================
 
-    -- Example: Move Tab Contents
+    -- Example: Move Tab Content
     do
         local function makeSection(title)
             local section = Instance.new("Frame", tabPages["Move"])
@@ -348,7 +346,7 @@ task.spawn(function()
             stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
             local dot = Instance.new("Frame", toggleFrame)
-            dot.Size = UDim2.new(0, 9, 0, 9)
+            dot.Size = UDim2.new("0,9", "0,9")
             dot.Position = UDim2.new(0, 14, 0.5, -4)
             dot.BackgroundColor3 = default and TH.green or TH.muted
             dot.BorderSizePixel = 0
@@ -385,25 +383,22 @@ task.spawn(function()
             local pillCirc = Instance.new("Frame", pillBg)
             pillCirc.Size = UDim2.new(0, 18, 0, 18)
             pillCirc.Position = default and UDim2.new(1, -21, 0.5, -9) or UDim2.new(0, 3, 0.5, -9)
-            pillCirc.BackgroundColor3 = Color3.new(1, 1, 1)
+            pillCirc.BackgroundColor3 = Color3.new(1,1,1)
             pillCirc.BorderSizePixel = 0
             Instance.new("UICorner", pillCirc).CornerRadius = UDim.new(1, 0)
 
-            -- Spin Border
+            -- Spin border
             local spinGlow, startSpin, stopSpin = makeAnimatedBorder(toggleFrame, color)
             local spinConn
 
             local function setActive(state)
-                -- Animate
                 TweenService:Create(pillBg, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {BackgroundColor3 = state and TH.green or TH.off}):Play()
                 TweenService:Create(pillCirc, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Position = state and UDim2.new(1, -21, 0.5, -9) or UDim2.new(0, 3, 0.5, -9)}):Play()
                 TweenService:Create(toggleFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {BackgroundColor3 = state and Color3.fromRGB(14, 22, 32) or TH.panel2}):Play()
-                -- Labels
                 statusLbl.Text = state and "● ACTIVE" or "○ INACTIVE"
                 statusLbl.TextColor3 = state and color or TH.muted
                 dot.BackgroundColor3 = state and TH.green or TH.muted
 
-                -- Spin animation
                 if state then
                     if spinConn then spinConn:Disconnect() end
                     spinConn = startSpin()
@@ -413,7 +408,6 @@ task.spawn(function()
                 end
             end
 
-            -- Toggle click
             local btn = Instance.new("TextButton", toggleFrame)
             btn.Size = UDim2.new(1, 0, 1, 0)
             btn.BackgroundTransparency = 1
@@ -425,64 +419,62 @@ task.spawn(function()
                 if callback then callback(newState) end
             end
 
-            -- Initialize
+            -- Initialize default
             if default then task.delay(0.1, function() setActive(true) end) end
-
-            -- Save setter
             toggleSetters[name] = setActive
             return toggleFrame, setActive
         end
 
-        -- Example Toggles
+        -- Example toggles
         makeToggle("Auto Left", false, TH.accent, function(s)
-            if s then
-                autoLOn = true
-                startAutoL()
-            else
-                autoLOn = false
-                stopAutoL()
-            end
+            if s then autoLOn=true; startAutoL() else autoLOn=false; stopAutoL() end
         end)
-        -- Repeat for other toggles...
+
+        makeToggle("Auto Right", false, TH.accent, function(s)
+            if s then autoROn=true; startAutoR() else autoROn=false; stopAutoR() end
+        end)
+
+        -- Add other toggles similarly...
 
     end
 
-    -- [Repeat similar structure for other tabs: Combat, Visual, Settings, Keys]
+    -- (Repeat similar structure for other tabs: Combat, Visual, Settings, Keys)
+    -- For brevity, not all tabs are fully expanded here, but follow the same pattern.
 
-    -- Floating Buttons (UI Buttons on screen)
+    -- ============================
+    -- Floating Buttons
+    -- ============================
     local FloatGui = Instance.new("ScreenGui", PlayerGui)
     FloatGui.Name = "2AMHUB_Float"
     FloatGui.ResetOnSpawn = false
     FloatGui.IgnoreGuiInset = true
 
-    local function createFloatButton(id, label1, label2, defX, defY, accent, onToggle, isAction)
+    local function createFloatBtn(id, label1, label2, defX, defY, accent, onToggle, isAction)
         local btn = Instance.new("TextButton", FloatGui)
-        btn.Name = "FloatBtn_"..id
+        btn.Name = "Float_"..id
         btn.Size = UDim2.new(0, 100, 0, 48)
         btn.Position = UDim2.new(0, defX, 0, defY)
         btn.BackgroundColor3 = Color3.fromRGB(10,12,18)
         btn.BorderSizePixel = 0
         btn.Text = ""
         btn.ZIndex = 22
-        btn.Active = true
         Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 16)
 
-        -- Border / glow
+        -- Border glow
         local stroke = Instance.new("UIStroke", btn)
         stroke.Color = TH.divider
         stroke.Thickness = 1.5
         stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
-        -- Indicator Dot
+        -- Dot indicator
         local dot = Instance.new("Frame", btn)
         dot.Size = UDim2.new(0, 8, 0, 8)
         dot.Position = UDim2.new(0, 10, 0, 10)
         dot.BackgroundColor3 = TH.muted
         dot.BorderSizePixel = 0
         Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
-        dot.ZIndex = 23
 
-        -- Text Labels
+        -- Labels
         local lbl1 = Instance.new("TextLabel", btn)
         lbl1.Size = UDim2.new(1, -14, 0, 24)
         lbl1.Position = UDim2.new(0, 12, 0, 10)
@@ -542,23 +534,19 @@ task.spawn(function()
             setActive(not (lbl1.Text == "● ACTIVE"))
         end
 
-        -- Initialize default state
-        if true then -- or default
-            task.delay(0.1, function() setActive(true) end)
-        end
-
-        -- Save setter
+        -- Initialize default
+        task.delay(0.1, function() setActive(true) end)
         toggleSetters[id] = setActive
         return btn, setActive
     end
 
     -- Create floating buttons
-    createFloatButton("Aimbot", "Aimbot", "Lock Target", 115, 130, TH.accent, function(s)
+    createFloatBtn("Aimbot", "Aimbot", "Lock Target", 115, 130, TH.accent, function(s)
         -- toggle Aimbot logic
     end)
-    createFloatButton("Drop", "Drop", "Fling", 115, 188, TH.gold, function() task.spawn(doDrop) end, true)
-    createFloatButton("TPDown", "TP", "Down", 115, 246, TH.accent, function() task.spawn(doTPDown) end, true)
-    createFloatButton("Desync", "Desync", "Mode", 115, 304, TH.gold, function(s)
+    createFloatBtn("Drop", "Drop", "Fling", 115, 188, TH.gold, function() task.spawn(doDrop) end, true)
+    createFloatBtn("TPDown", "TP", "Down", 115, 246, TH.accent, function() task.spawn(doTPDown) end, true)
+    createFloatBtn("Desync", "Desync", "Mode", 115, 304, TH.gold, function(s)
         desyncEnabled = s
         if s then
             speedMode = "DESYNC"
@@ -568,7 +556,7 @@ task.spawn(function()
             speedMode = "NORMAL"
         end
     end)
-    createFloatButton("LagSpeed", "Lag", "Speed", 115, 362, TH.purple, function(s)
+    createFloatBtn("LagSpeed", "Lag", "Speed", 115, 362, TH.purple, function(s)
         lagSpeedEnabled = s
         if s then
             speedMode = "LAGGER"
@@ -580,14 +568,16 @@ task.spawn(function()
             stopLagSpeed()
         end
     end)
-    createFloatButton("AutoLeft", "Auto", "Left", 115, 420, TH.accent, function(s)
+    createFloatBtn("AutoLeft", "Auto", "Left", 115, 420, TH.accent, function(s)
         if s then autoLOn=true; startAutoL() else autoLOn=false; stopAutoL() end
     end)
-    createFloatButton("AutoRight", "Auto", "Right", 165, 420, TH.accent, function(s)
+    createFloatBtn("AutoRight", "Auto", "Right", 165, 420, TH.accent, function(s)
         if s then autoROn=true; startAutoR() else autoROn=false; stopAutoR() end
     end)
 
-    -- Hamburger menu
+    -- ============================
+    -- Hamburger Button to toggle main UI
+    -- ============================
     local hamBtn = Instance.new("TextButton", FloatGui)
     hamBtn.Size = UDim2.new(0, 48, 0, 48)
     hamBtn.Position = UDim2.new(1, -58, 0, 10)
@@ -605,8 +595,6 @@ task.spawn(function()
         bar.BorderSizePixel = 0
         Instance.new("UICorner", bar).CornerRadius = UDim.new(0, 2)
     end
-
-    -- Toggle main UI on hamburger click
     hamBtn.MouseButton1Click: = function()
         mainFrame.Visible = not mainFrame.Visible
         if mainFrame.Visible then
@@ -614,9 +602,10 @@ task.spawn(function()
             TweenService:Create(mainFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {BackgroundTransparency=0.08}):Play()
         end
     end
+    makeDraggable(mainFrame, titleBar)
 
     -- ============================
-    -- Progress Bar
+    -- Progress Bar at bottom center
     -- ============================
     local PBC = Instance.new("Frame", PlayerGui)
     PBC.Size = UDim2.new(0, 250, 0, 38)
@@ -625,6 +614,7 @@ task.spawn(function()
     PBC.BackgroundTransparency = 0
     PBC.BorderSizePixel = 0
     Instance.new("UICorner", PBC).CornerRadius = UDim.new(0, 14)
+
     local pbStroke = Instance.new("UIStroke", PBC)
     pbStroke.Color = TH.accent
     pbStroke.Thickness = 1.5
@@ -658,20 +648,24 @@ task.spawn(function()
     ProgressPctLabel.Visible = false
 
     -- ============================
-    -- Input Handlers
+    -- Input Handlers for keybinds
     -- ============================
     Services.UserInputService.InputBegan:Connect(function(input, processed)
         if processed then return end
         local kc = input.KeyCode
         if kc == Enum.KeyCode.Unknown then return end
-        -- Keybind handling (update accordingly)
-        -- ...
+        -- Handle keybinds here, e.g.:
+        -- if kc == Keybinds.AutoLeft then ...
     end)
 
     -- ============================
     -- Initialize Features
     -- ============================
-    -- espEnabled, brainrotDefenseEnabled, etc.
-    -- ...
+    -- Example: toggle ESP, Spin, etc.
+    -- For example:
+    -- if espEnabled then enableESP() end
+    -- if spinBotEnabled then startSpin() end
+    -- etc.
+
     print("✅ 2AMHUB Loaded!")
 end)
